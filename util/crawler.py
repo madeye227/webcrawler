@@ -20,21 +20,16 @@ class Crawler:
         if not urlTemp.startswith(("http://", "https://")):
             urlTemp = "http://"+urlTemp
 
-        request = requests.get(urlTemp)
         print("-------------------------------------request.text----------------------------")
+        request = requests.get(urlTemp)
 
         try:
             if request.status_code == 200:
                 html_doc = request.text
-                # print(html_doc)
-                # print(html_doc)
-                # if isinstance(html_doc, str):
                 soup = BeautifulSoup(html_doc, "html.parser")
-                # [image["src"] for image in soup.findAll("img")]
                 images = soup.findAll('img')
                 # srcs = [img['src'] for img in soup.find_all('img')]
                 for image in images:
-                    # print("ddd")
                     try:
                         if image.has_attr('src'):
                             if image["src"].startswith("http"):
@@ -43,16 +38,10 @@ class Crawler:
                                 data["pageImages"].append(urlTemp+image["src"])
                     except KeyError:
                         pass
-                    # if "src" in image:
-
                 for links in soup.findAll("a"):
                     try:
                         if links.has_attr('href'):
                             if validators.url(links["href"])  or validators.url(urlTemp+links["href"]):
-                                print(links["href"].startswith("http"))
-                                print(links["href"].startswith("http"))
-                                print(links["href"])
-
                                 if links["href"].startswith("http"):
                                     data["pageLinks"].append(links["href"])
                                 else:
